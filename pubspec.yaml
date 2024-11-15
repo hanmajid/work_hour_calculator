@@ -1,6 +1,6 @@
 name: work_hour_calculator
 description: "Flutter package that calculates how many working hours are spent between two DateTimes"
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/hanmajid/work_hour_calculator
 issue_tracker: https://github.com/hanmajid/work_hour_calculator/issues
 repository: https://github.com/hanmajid/work_hour_calculator
