@@ -227,61 +227,32 @@ void main() {
       test('should return correctly within the work week', () {
         var start = DateTime(2024, 10, 17, 15, 17);
         var end = DateTime(2024, 10, 22, 10, 14);
-        var invalidData = WorkWeekData(
-          workdays: [
-            // Monday
-            WorkDayData(
-              workHours: [
-                WorkHourData(startHour: 9, endHour: 12), // 09.00-12.00
-                WorkHourData(startHour: 13, endHour: 18), // 13.00-18.00
-              ],
-            ),
-            // Tuesday
-            WorkDayData(
-              workHours: [
-                WorkHourData(startHour: 9, endHour: 12),
-                WorkHourData(startHour: 13, endHour: 18),
-              ],
-            ),
-            // Wednesday
-            WorkDayData(
-              workHours: [
-                WorkHourData(startHour: 9, endHour: 12),
-                WorkHourData(startHour: 13, endHour: 18),
-              ],
-            ),
-            // Thursday
-            WorkDayData(
-              workHours: [
-                WorkHourData(startHour: 9, endHour: 12),
-                WorkHourData(startHour: 13, endHour: 18),
-              ],
-            ),
-            // Friday
-            WorkDayData(
-              workHours: [
-                WorkHourData(startHour: 9, endHour: 12),
-                WorkHourData(startHour: 13, endHour: 18),
-              ],
-            ),
-            // Saturday
-            WorkDayData(
-              workHours: [],
-            ),
-            // Sunday
-            WorkDayData(
-              workHours: [],
-            ),
-          ],
-        );
 
         expect(
           calculator.calculateWorkHours(
             start,
             end,
-            invalidData,
+            data,
           ),
           const Duration(hours: 19, minutes: 57),
+        );
+      });
+      test('should return correctly within the work week with specialDates',
+          () {
+        var start = DateTime(2024, 10, 17, 15, 17);
+        var end = DateTime(2024, 10, 22, 10, 14);
+
+        expect(
+          calculator.calculateWorkHours(
+            start,
+            end,
+            data,
+            specialDates: {
+              // Change 18 October 2024 to day-off
+              DateTime(2024, 10, 18): WorkDayData(workHours: []),
+            },
+          ),
+          const Duration(hours: 11, minutes: 57),
         );
       });
       test('should throw error if start is after end', () {

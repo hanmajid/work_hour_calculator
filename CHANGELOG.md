@@ -1,3 +1,9 @@
+## 0.0.4
+
+#### Added
+* Add `specialDates` parameter to `calculateWorkHours`.
+* Add `dart_pre_commit`.
+
 ## 0.0.3
 
 ### Added

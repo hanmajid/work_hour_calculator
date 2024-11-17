@@ -84,26 +84,43 @@ class WorkHourCalculator {
     return total;
   }
 
+  WorkDayData _getWorkDayData(
+    WorkWeekData workWeekData,
+    DateTime date,
+    Map<DateTime, WorkDayData>? specialDates,
+  ) {
+    if (specialDates != null) {
+      try {
+        DateTime specialDate = specialDates.keys
+            .firstWhere((specialDate) => isSameDay(date, specialDate));
+        return specialDates[specialDate]!;
+      } on StateError catch (_) {
+        // No special date found
+      }
+    }
+    var index = date.weekday - 1;
+    return workWeekData.workdays[index];
+  }
+
   /// Calculates work hours within a single [WorkWeekData].
   Duration calculateWorkHours(
     DateTime start,
     DateTime end,
-    WorkWeekData workWeekData,
-  ) {
+    WorkWeekData workWeekData, {
+    Map<DateTime, WorkDayData>? specialDates,
+  }) {
     if (start.isAfter(end)) {
       throw ArgumentError('start cannot be after end!');
     }
     if (isSameDay(start, end)) {
-      var index = start.weekday - 1;
-      var workDayData = workWeekData.workdays[index];
+      var workDayData = _getWorkDayData(workWeekData, start, specialDates);
       return calculateWorkHoursInOneDay(start, end, workDayData);
     }
     Duration total = Duration.zero;
     DateTime day = start;
     DateTime lastDay = end.add(const Duration(days: 1));
     do {
-      var index = day.weekday - 1;
-      var workDayData = workWeekData.workdays[index];
+      var workDayData = _getWorkDayData(workWeekData, day, specialDates);
       var s = DateTime(day.year, day.month, day.day);
       if (isSameDay(start, day)) {
         s = start;
